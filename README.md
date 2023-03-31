@@ -1,6 +1,6 @@
 # gobump CLI tool
 
-[![Build Status](https://github.com/danilvpetrov/gobump/workflows/CI/badge.svg)](https://github.com/danilvpetrov/gobump/actions?workflow=CI)
+[![CI](https://github.com/danilvpetrov/gobump/actions/workflows/ci.yml/badge.svg)](https://github.com/danilvpetrov/gobump/actions/workflows/ci.yml)
 
 ## About
 
