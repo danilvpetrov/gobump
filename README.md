@@ -12,7 +12,7 @@ running within a valid Go module directory.
 
 ```sh
 gobump github.com/exampleorg/examplerepo/v2
-```al
+```
 
 The following example downgrades the module path to `v0/v1`. The command
 requires running within a valid Go module directory.
@@ -23,7 +23,7 @@ gobump github.com/exampleorg/examplerepo
 
 ## Installation
 
-To install into `GOBIN` folder run the following command:
+To install into `GOBIN` folder, run the following command:
 
 ```sh
 go install github.com/danilvpetrov/gobump/cmd/gobump@latest
