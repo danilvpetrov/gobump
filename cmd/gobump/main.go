@@ -57,7 +57,16 @@ func runTidy() error {
 }
 
 func usage() {
-	fmt.Fprintf(os.Stderr, "usage: gobump [flags] <new go module path>\n")
+	fmt.Fprintf(
+		os.Stderr,
+		`
+This tool allows managing the major version in the Go module paths. The module
+path can be the path of the module itself or one of the module's dependencies.
+
+usage: gobump [flags] <new go module path>
+
+`,
+	)
 	flag.PrintDefaults()
 }
 
