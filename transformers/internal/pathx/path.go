@@ -24,8 +24,6 @@ func UpdateImportPath(newModule, importPath string) (_ string, ok bool, _ error)
 	}
 
 	if !strings.HasPrefix(importPath, pfx) {
-		// The targeted import path is not related to the new model.
-		// Return the import path unchanged.
 		return "", false, nil
 	}
 
