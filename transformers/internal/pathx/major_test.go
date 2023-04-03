@@ -1,6 +1,10 @@
-package pathx
+package pathx_test
 
-import "testing"
+import (
+	"testing"
+
+	. "github.com/danilvpetrov/gobump/transformers/internal/pathx"
+)
 
 func TestIsPathMajor(t *testing.T) {
 	tests := []struct {
