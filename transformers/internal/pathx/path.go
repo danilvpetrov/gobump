@@ -36,13 +36,13 @@ func UpdateImportPath(newModule, importPath string) (_ string, ok bool, _ error)
 
 	ee := pathElementsAfterPrefix(pfx, importPath)
 	if len(ee) > 0 {
-		if isPathMajor(ee[0]) {
+		if IsPathMajor(ee[0]) {
 			ee[0] = vp
 		} else {
 			for _, el := range ee[1:] {
 				// If the position of the major version in the original import
 				// path does not match to the path, bail out.
-				if isPathMajor(el) {
+				if IsPathMajor(el) {
 					return "", false, nil
 				}
 			}
@@ -63,24 +63,4 @@ func pathElementsAfterPrefix(prefix, path string) []string {
 		strings.Split(path, "/")
 
 	return pathEls[len(pfxEls):]
-}
-
-func isPathMajor(in string) bool {
-	if len(in) < 2 {
-		return false
-	}
-
-	if in[0] != 'v' || (in[1] < '2' || in[1] > '9') {
-		return false
-	}
-
-	if len(in) > 2 {
-		for _, l := range in[2:] {
-			if l < '0' || l > '9' {
-				return false
-			}
-		}
-	}
-
-	return true
 }

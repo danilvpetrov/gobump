@@ -84,7 +84,7 @@ func TestUpdateImportPath(t *testing.T) {
 		{
 			name:       "partially matching but major versions in different positions",
 			newModule:  "example.org/foo/bar/v2",
-			importPath: "example.org/foo/bar/v/v2v/v3",
+			importPath: "example.org/foo/bar/foobar/v3",
 			wantOK:     false,
 		},
 		{
