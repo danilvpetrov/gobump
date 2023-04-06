@@ -26,7 +26,7 @@ func UpdateModulePath(
 
 		pfx, _, ok := module.SplitPathVersion(modulePath)
 		if !ok {
-			return false, fmt.Errorf("target path %s is invalid", modulePath)
+			return false, fmt.Errorf("module path %s is invalid", modulePath)
 		}
 
 		if op, _, _ := module.SplitPathVersion(mf.Module.Mod.Path); op != pfx {

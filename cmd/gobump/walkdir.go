@@ -8,6 +8,7 @@ import (
 
 	"github.com/danilvpetrov/gobump/transformers/gofile"
 	"github.com/danilvpetrov/gobump/transformers/gomodfile"
+	"github.com/danilvpetrov/gobump/transformers/protofile"
 )
 
 // walkDir walks a given directory and runs the relevant file transformers that
@@ -40,10 +41,12 @@ func walkDir(dir, newPath string) error {
 			switch {
 			default:
 				return nil
-			case filepath.Ext(path) == ".go":
-				return runTransformers(path, gofile.UpdateImports(newPath))
 			case filepath.Base(path) == "go.mod":
 				return runTransformers(path, gomodfile.UpdateModulePath(newPath))
+			case filepath.Ext(path) == ".go":
+				return runTransformers(path, gofile.UpdateImports(newPath))
+			case filepath.Ext(path) == ".proto":
+				return runTransformers(path, protofile.UpdateModulePath(newPath))
 			}
 		},
 	)
