@@ -5,6 +5,12 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
+
+	"github.com/danilvpetrov/gobump"
+	"github.com/danilvpetrov/gobump/transformers/gofile"
+	"github.com/danilvpetrov/gobump/transformers/gomodfile"
+	"github.com/danilvpetrov/gobump/transformers/protofile"
 )
 
 func run() error {
@@ -29,7 +35,21 @@ func run() error {
 		return err
 	}
 
-	if err := walkDir(wd, newPath); err != nil {
+	if err := gobump.WalkDir(
+		os.DirFS(wd),
+		func(path string) error {
+			switch {
+			default:
+				return nil
+			case filepath.Base(path) == "go.mod":
+				return runTransformers(path, gomodfile.UpdateModulePath(newPath))
+			case filepath.Ext(path) == ".go":
+				return runTransformers(path, gofile.UpdateImports(newPath))
+			case filepath.Ext(path) == ".proto":
+				return runTransformers(path, protofile.UpdateModulePath(newPath))
+			}
+		},
+	); err != nil {
 		return err
 	}
 
