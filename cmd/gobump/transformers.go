@@ -10,7 +10,10 @@ import (
 
 // runTransformers runs transformers against the file. If transformers performed
 // conflicting changes to the file, the last transformer always takes precedence.
-func runTransformers(file string, tt ...transformers.Transformer) error {
+func runTransformers(
+	file string,
+	tt ...transformers.Transformer,
+) error {
 	f, err := os.OpenFile(file, os.O_RDWR, 0644)
 	if err != nil {
 		return err
