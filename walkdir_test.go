@@ -54,6 +54,15 @@ func TestWalkDir(t *testing.T) {
 			},
 			wantErr: true,
 		},
+		{
+			name: "should return error if directory does not exist",
+			fs:   os.DirFS("non/existing/directory"),
+			f: func(file string) error {
+				t.Error("WalkDir() should not have called f()")
+				return nil
+			},
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
