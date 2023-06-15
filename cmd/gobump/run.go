@@ -27,8 +27,9 @@ func run() error {
 	flag.Parse()
 
 	newPath := flag.Arg(0)
-	if err := module.CheckPath(newPath); err != nil {
-		return fmt.Errorf("invalid module path %q: %w", newPath, err)
+
+	if err := checkPath(wd, newPath); err != nil {
+		return err
 	}
 
 	if err := gobump.WalkDir(
@@ -71,6 +72,34 @@ func run() error {
 	return nil
 }
 
+func checkPath(wd, path string) error {
+	if err := module.CheckPath(path); err != nil {
+		return fmt.Errorf("invalid module path %q: %w", path, err)
+	}
+
+	mp, dr, err := gobump.ParseModules(wd)
+	if err != nil {
+		return err
+	}
+
+	pn, po := modulePrefix(mp), modulePrefix(path)
+	if pn == po {
+		return nil
+	}
+
+	for _, m := range dr {
+		if pd := modulePrefix(m); pd == po {
+			return nil
+		}
+	}
+
+	return fmt.Errorf(
+		"module path '%s' does not match module '%s' or any of its direct dependencies",
+		path,
+		mp,
+	)
+}
+
 func runGoGet(module string) error {
 	args := []string{"go", "get", fmt.Sprintf("%s@latest", module)}
 
@@ -100,23 +129,17 @@ func runGoModTidy() error {
 }
 
 func shouldRunGoGet(wd, path string) (bool, error) {
-	mp, dr, err := gobump.ParseModules(wd)
+	mp, _, err := gobump.ParseModules(wd)
 	if err != nil {
 		return false, err
 	}
 
-	pn, po := modulePrefix(mp), modulePrefix(path)
-	if pn == po {
+	if pn, po := modulePrefix(mp), modulePrefix(path); pn == po {
 		return false, nil
 	}
 
-	for _, m := range dr {
-		if pd := modulePrefix(m); pd == po {
-			return true, nil
-		}
-	}
-
-	return false, nil
+	// The module path is assumed to be a direct dependency of the module.
+	return true, nil
 }
 
 func modulePrefix(path string) string {
@@ -133,7 +156,7 @@ func usage() {
 		os.Stderr,
 		`
 This tool allows managing the major version in the Go module paths. The module
-path can be the path of the module itself or one of the module's dependencies.
+path can be the path of the module itself or one of the module's direct dependencies.
 
 usage: gobump [flags] <new go module path>
 
