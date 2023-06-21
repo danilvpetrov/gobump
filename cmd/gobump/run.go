@@ -106,12 +106,11 @@ func runGoGet(module string) error {
 	fmt.Printf("running '%s'...", strings.Join(args, " "))
 
 	out, err := exec.Command(args[0], args[1:]...).CombinedOutput()
+	os.Stderr.Write(out)
 	if err != nil {
-		os.Stderr.Write(out)
 		return fmt.Errorf("error running '%s': %v", strings.Join(args, " "), err)
 	}
 
-	os.Stdout.Write(out)
 	return nil
 }
 
@@ -119,12 +118,11 @@ func runGoModTidy() error {
 	fmt.Println("running 'go mod tidy'...")
 
 	out, err := exec.Command("go", "mod", "tidy").CombinedOutput()
+	os.Stderr.Write(out)
 	if err != nil {
-		os.Stderr.Write(out)
 		return fmt.Errorf("error running 'go mod tidy': %v", err)
 	}
 
-	os.Stdout.Write(out)
 	return nil
 }
 
